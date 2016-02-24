@@ -76,6 +76,7 @@ class apache (
   $trace_enable           = 'On',
   $allow_encoded_slashes  = undef,
   $package_ensure         = 'installed',
+  $package_manage         = true,
   $use_optional_includes  = $::apache::params::use_optional_includes,
   $use_systemd            = $::apache::params::use_systemd,
   $mime_types_additional  = $::apache::params::mime_types_additional,
@@ -108,7 +109,7 @@ class apache (
   # should delete the 'if' block below and modify all MPM modules' manifests
   # such that they include apache::package class (currently event.pp, itk.pp,
   # peruser.pp, prefork.pp, worker.pp).
-  if $::osfamily != 'FreeBSD' {
+  if $::osfamily != 'FreeBSD' and $package_manage {
     package { 'httpd':
       ensure => $package_ensure,
       name   => $apache_name,

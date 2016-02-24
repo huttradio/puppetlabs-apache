@@ -1,6 +1,7 @@
 define apache::mpm (
   $lib_path       = $::apache::lib_path,
   $apache_version = $::apache::apache_version,
+  $package_manage = $::apache::package_manage,
 ) {
   if ! defined(Class['apache']) {
     fail('You must include the apache base class before using any apache defined resources')
@@ -78,8 +79,10 @@ define apache::mpm (
       }
     }
     'freebsd': {
-      class { '::apache::package':
-        mpm_module => $mpm
+      if $package_manage {
+        class { '::apache::package':
+          mpm_module => $mpm
+        }
       }
     }
     'gentoo': {
